@@ -3,9 +3,6 @@ import requests
 from bs4 import BeautifulSoup
 import openai
 
-st.title("Chat with AI")
-st.write("Ask anything you want")
-
 # Set your OpenAI API key
 openai.api_key = "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"
 
@@ -19,8 +16,6 @@ def scrape_website(url, selector):
         extracted_info = soup.select_one(selector).text
         return extracted_info
     except (requests.exceptions.RequestException, AttributeError, ValueError) as e:
-        st.error(f"An error occurred while scraping the website: {str(e)}")
-        st.error(f"URL: {url}")
         return f"An error occurred while scraping the website: {str(e)}"
 
 def extract_features(url, feature):
@@ -39,14 +34,11 @@ def extract_features(url, feature):
             extracted_feature = "Invalid feature requested."
         return extracted_feature
     except (requests.exceptions.RequestException, AttributeError, ValueError) as e:
-        st.error(f"An error occurred while extracting the feature: {str(e)}")
-        st.error(f"URL: {url}")
         return f"An error occurred while extracting the feature: {str(e)}"
 
 def analyze_text(text):
     return f"Text analysis results: {text}"
 
-@st.cache
 def chatbot(input):
     if input:
         messages.append({"role": "user", "content": input})
@@ -67,10 +59,14 @@ def chatbot(input):
             messages.append({"role": "assistant", "content": reply})
             return reply
         except openai.error.APIError as e:
-            st.error(f"OpenAI API Error: {str(e)}")
             return "An error occurred while processing the request. Please try again later."
 
+# Streamlit UI elements
+st.title("Chat with AI")
+st.write("Ask anything you want")
 user_input = st.text_area("Input URL & Extract the information or Chat to AI")
+
+# Call chatbot function when user input is provided
 if user_input:
     reply = chatbot(user_input)
     st.text(reply)
