@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import openai
 
 # Set your OpenAI API key
-openai.api_key = "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"
+openai.api_key = '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'
 
 messages = [{"role": "system", "content": "You are a helpful and kind AI Assistant."}]
 
